@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title>{% block title %}AndroidTO Alerts Control Panel{% endblock %}</title>
+	<title>{% block title %}Log In | AndroidTO Alerts Control Panel{% endblock %}</title>
 	<link rel="stylesheet" href="/assets/style.css" type="text/css" media="screen" charset="utf-8" />
 </head>
 
@@ -11,29 +11,39 @@
 <div id="header">
 
 <h1>AndroidTO - Alerts</h1>
-<h2>Alerts Dispatch Panel</h2>
+<h2>Log In</h2>
 <br/>
 <br/>
 
-{% if error_message %}<div id="error"><p><strong>ERROR: {{ error_message }}</strong></p></div>{% endif %}
+{% block main %}
 
-<form action="/alertspusher/sendalert/" method="post">
-{% csrf_token %}
-    <p>
-        <label for="message"><h2>Enter Message</h2></label><br/>
-        <input id="message" name="message"  type="text" style="width: 95%; margin-top: 1px; margin-bottom: 8px;" />
-    </p>
-    <p>
-        <input type="submit" value="Push Alert Now" />
-    </p>
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+<form method="post" action="{% url django.contrib.auth.views.login %}">
+<table>
+<tr>
+    <td>{{ form.username.label_tag }}</td>
+    <td>{{ form.username }}</td>
+</tr>
+<tr>
+    <td>{{ form.password.label_tag }}</td>
+    <td>{{ form.password }}</td>
+</tr>
+</table>
+
+<input type="submit" value="login" />
+<input type="hidden" name="next" value="{{ redirect_to }}" />
 </form>
+
+{% endblock %}
 
 </div>
 </div>
 
 <div id="footer">
     <div id="footer-inner">
-        <a href="/accounts/logout">Sign out</a><br><br>
         © Copyright 2010 by <a href="http://github.com/bc0nt13">Bruno Conti</a>. All Rights Reserved.<br>
     </div>
 </div> 
